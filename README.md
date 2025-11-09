@@ -62,7 +62,7 @@ O horário do alerta é configurado através do potenciômetro, e a comunicaçã
 ├── sketch.ino       # Código principal do projeto
 ├── diagram.json     # Diagrama do circuito no Wokwi
 └── libraries.txt    # Bibliotecas necessárias
-´´´
+```
 
 ## 🚀 Simulação no Wokwi
 
