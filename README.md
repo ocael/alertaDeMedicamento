@@ -1,65 +1,64 @@
-# **Alerta de Medicamento**
+# 💡 Lembrete Inteligente de Medicamento
 
-Este repositório implementa um sistema de **alerta de medicamento** utilizando um ESP32, display OLED, potenciômetro e buzzer.  
-O horário do alerta é configurado através do potenciômetro, e a comunicação ocorre via protocolo **MQTT**, com sincronização automática de horário via **NTP**.
-
----
-
-## 📷 Protótipo
-
-> *Simulação feita no [Wokwi](https://wokwi.com/).*
-
-![Protótipo do circuito](imagens/prototipo.png)
+Este projeto é um **sistema de alerta de medicação** utilizando ESP32, display OLED, potenciômetro e buzzer.  
+Ele envia notificações sonoras e via **MQTT**, com hora sincronizada automaticamente através de **NTP**.
 
 ---
 
-## 🔧 Componentes Utilizados
+## 🔬 Protótipo do Circuito
 
-* **Placa:** ESP32 DevKit C v4 (simulado no Wokwi)  
-* **Display:** OLED monocromático I2C  
-* **Entrada:** Potenciômetro (configuração do horário de alerta)  
-* **Atuador:** Buzzer piezoelétrico (alerta sonoro)  
-* **Comunicação:** Wi-Fi + MQTT via `test.mosquitto.org:1883` + NTP (fuso horário GMT-3)
+> Simulação realizada no [Wokwi](https://wokwi.com/)
+
+![Protótipo do sistema](imagens/prototipo.png)
 
 ---
 
-## ⚙️ Como Funciona
+## 🛠 Materiais Necessários
 
-1. **Configuração do Horário**  
-   O potenciômetro permite ajustar o horário do alerta de 00:00 a 23:59.
+- **Placa:** ESP32 DevKit C v4  
+- **Display:** OLED I2C monocromático  
+- **Controle de horário:** Potenciômetro  
+- **Alerta sonoro:** Buzzer piezoelétrico  
+- **Conexão:** Wi-Fi para MQTT e NTP
 
-2. **Sincronização de Horário**  
-   O ESP32 se conecta a um servidor NTP para obter o horário atual automaticamente.
+---
 
-3. **Monitoramento**  
-   O sistema compara constantemente o horário atual com o horário configurado pelo usuário.
+## ⚙️ Funcionamento do Sistema
 
-4. **Alerta Sonoro**  
-   Quando o horário atual coincide com o horário configurado:
-   * O **buzzer emite um som intermitente** a cada 500 ms  
-   * Uma mensagem “CHEGOU A HORA!” é enviada via MQTT  
-   * O display OLED exibe o aviso de “ALERTA DE MEDICAMENTO!”
+1. **Definindo o Horário**  
+   - Ajuste o potenciômetro para escolher o horário do alerta (00:00 a 23:59).
 
-5. **Exibição no Display**  
-   O OLED mostra em tempo real:
-   * Horário atual  
-   * Próximo horário configurado para o medicamento  
-   * Mensagem de alerta quando for a hora de tomar
+2. **Hora Atual Automática**  
+   - O ESP32 consulta um servidor NTP para manter o relógio sempre correto.
+
+3. **Monitoramento Contínuo**  
+   - O microcontrolador verifica se o horário atual coincide com o configurado.
+
+4. **Alerta de Medicação**  
+   Quando o horário definido chega:  
+   - O buzzer toca a cada 500ms  
+   - A mensagem **“CHEGOU A HORA!”** é publicada via MQTT  
+   - O OLED exibe **“ALERTA DE MEDICAMENTO!”**
+
+5. **Visualização no Display**  
+   - Horário atual  
+   - Próximo horário de medicação  
+   - Mensagem de alerta quando necessário
 
 6. **MQTT**  
-   * Publicação nos tópicos:
-     * `medicamento/horamedicamento` → horário configurado no formato HH:MM  
-     * `medicamento/alertamedicamento` → mensagem “CHEGOU A HORA!” quando o alarme dispara  
-   * Broker: `test.mosquitto.org`  
-   * Porta: `1883`  
-   * Cliente MQTT: PubSubClient para ESP32  
+   - Tópicos publicados:  
+     - `medicamento/horamedicamento` → horário configurado (HH:MM)  
+     - `medicamento/alertamedicamento` → alerta disparado  
+   - Broker: `test.mosquitto.org`  
+   - Porta: `1883`  
+   - Biblioteca: PubSubClient
 
 ---
 
-## 📁 Estrutura de Arquivos
+## 📂 Organização dos Arquivos
 
 ```plaintext
-├── sketch.ino       # Código principal do projeto
+├── sketch.ino       # Código principal
 ├── diagram.json     # Diagrama do circuito no Wokwi
 └── libraries.txt    # Bibliotecas necessárias
 ```
@@ -67,45 +66,48 @@ O horário do alerta é configurado através do potenciômetro, e a comunicaçã
 ## 🚀 Simulação no Wokwi
 
 1. Acesse [https://wokwi.com](https://wokwi.com)  
-2. Crie um novo projeto e envie os arquivos:  
-   * `sketch.ino`  
-   * `diagram.json`  
-   * `libraries.txt`  
-3. Clique em **Start Simulation**  
-4. Abra o **Serial Monitor** para acompanhar as mensagens publicadas via MQTT  
-5. Observe o **display OLED** e ajuste o **potenciômetro** para configurar o horário do alerta  
+2. Crie um novo projeto  
+3. Envie os arquivos:  
+   - `sketch.ino`  
+   - `diagram.json`  
+   - `libraries.txt`  
+4. Clique em **Start Simulation**  
+5. Abra o **Serial Monitor** para conferir mensagens MQTT  
+6. Ajuste o **potenciômetro** e acompanhe o alerta no **OLED**
 
 ---
 
-## 🛰️ Interfaces e Protocolos
+## 🌐 Protocolos e Comunicação
 
-O projeto utiliza comunicação via **MQTT** (Message Queuing Telemetry Transport) e sincronização via **NTP** (Network Time Protocol):
+- **MQTT:** Envio de mensagens de alerta  
+- **NTP:** Sincronização automática do relógio  
 
-* **Broker MQTT:** `test.mosquitto.org`  
-* **Porta:** `1883`  
-* **Transporte:** TCP/IP  
-* **Cliente MQTT:** PubSubClient  
-* **Servidor NTP:** `pool.ntp.org` (GMT-3)  
+**Configurações:**
 
-### Publicações (ESP32 → Broker)
+- Broker: `test.mosquitto.org`  
+- Porta: `1883`  
+- Cliente MQTT: `PubSubClient`  
+- Servidor NTP: `pool.ntp.org` (GMT-3)
 
-| Tópico                         | Descrição                                                |
-| -------------------------------| -------------------------------------------------------- |
-| `medicamento/horamedicamento`  | Horário configurado para o medicamento (formato HH:MM)   |
-| `medicamento/alertamedicamento`| Mensagem de alerta quando o horário é atingido           |
+**Tópicos de publicação:**
+
+| Tópico                         | Conteúdo                                      |
+| -------------------------------| -------------------------------------------- |
+| `medicamento/horamedicamento`  | Horário definido pelo usuário (HH:MM)        |
+| `medicamento/alertamedicamento`| Mensagem de alerta quando o horário chega    |
 
 ---
 
 ## 🔄 Possíveis Extensões
 
-* Adicionar LED indicador de alerta  
-* Configuração remota do horário via MQTT  
-* Vários horários programáveis  
-* Histórico de alertas disparados  
-* Integração com Node-RED para visualização em painel  
+- LED adicional para indicação de alerta  
+- Ajuste remoto do horário via MQTT  
+- Vários horários programáveis  
+- Histórico de alertas  
+- Integração com dashboards (Node-RED)
 
 ---
 
-## 📜 Licença
+## 📄 Licença
 
-Este projeto está licenciado sob a **MIT License**. Consulte o arquivo `LICENSE` para mais detalhes.
+Este projeto é distribuído sob **MIT License**. Veja `LICENSE` para mais detalhes.
